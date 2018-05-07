@@ -1446,6 +1446,12 @@ function _start_daemons_dovecot() {
 		#echo "Listing users"
 		#/usr/sbin/dovecot user '*'
 	#fi
+
+	doveadm -v index -u ${login} Inbox
+	curl http://localhost:8983/solr/dovecot/update?optimize=true
+	curl http://localhost:8983/solr/dovecot/update?commit=true
+	doveadm fts rescan -u ${login}
+	
 }
 
 function _start_daemons_filebeat() {
